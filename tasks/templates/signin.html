@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<main class="container">
+	<div class="row">
+		<section class="col-md-4 offset-md-4 mt-5">
+			<form class="card card-body text-center" action="/signin/" method="post">
+				<h1 class="display-3 text-center">signin</h1>
+				{% csrf_token %}
+				{{ error }}
+				<div class="mb-3">
+					<label class="form-text" for="id_username">Username:</label>
+					<input class="form-control" type="text" name="username" autofocus="" autocapitalize="none" autocomplete="username" maxlength="150" required="" id="id_username">
+				</div>
+				<div class="mb-3">
+					<label class="form-text" for="id_password">Password:</label>
+					<input class="form-control" type="password" name="password" autocomplete="current-password" required="" id="id_password">
+				</div>
+				<div class="mb-3">
+					<button class="btn btn-primary">
+						signin
+					</button>
+				</div>
+			</form>
+		</section>
+{% endblock content %}

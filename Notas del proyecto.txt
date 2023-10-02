@@ -1,0 +1,398 @@
+01.-Project SetUp
+	1.-Creamos una carpeta con el nombre de nuestro proyecto "django-crud-auth"
+	
+	2.-Creamos un entorno virtual, dentro de la carpeta creada con el siguiente comando:
+		#ejemplo de comando para crear un nuevo entorno virtual desde la terminal:
+				PS C:\Users\WILLIAM CANO\Desktop\django-crud-auth>py -m venv venv #aplicacion -modulo venv nombre_carpeta
+				
+	3.-Activamos el entorno virtual desde VSC, con el siguiente comando en VSC.
+		"F1->,Interprete python, Select interprete en la carpeta del proyecto"
+			NOTA: Si surge el error de que no se pueden ejecutar script desde la terminar de VSC, verificar el siguiente video:
+			"https://youtu.be/9HYQsCjKAmg" #Como habilitar la ejecución de los Scripts.
+			
+			tambien se puede inicar el entorno virtual desde la terminal, sobre la carpetade proyecto con el siguiente comando.
+				#ejemplo de comando para activar entorno virtual desde terminal:
+					PS C:\Users\WILLIAM CANO\Desktop\django-crud-auth>.\venv\Scripts\Activate
+					
+				#ejemplo de comando para desactivar entorno virtual desde terminal:
+					PS C:\Users\WILLIAM CANO\Desktop\django-crud-auth>.\venv\Scripts\deactivate.bat
+
+	4.-Una vez abierta la terminal con el entorno virutal activo, vamos a descargar django, en la terminal escribimos el siguiente comando.
+		#ejemplo de comando para descargar django:
+			(venv) PS C:\Users\WILLIAM CANO\Desktop\django-crud-auth>pip install django
+			
+		cuando termine la instalacion, tendremos un nuevo comando disponible el cual es el siguiente:
+			#ejemplo de comando para consultar version de django:
+				(venv) PS C:\Users\WILLIAM CANO\Desktop\django-crud-auth>django-admin --version
+				
+		este comando mostrara la version disponible de django instalada.
+		
+	5.-Ahora inicializamos un nuevo proyecto con django con el siguiente comando.
+		#ejemplo de comando para inciar un nuevo proyecto utilizando django:
+			(venv) PS C:\Users\WILLIAM CANO\Desktop\django-crud-auth>django-admin startproject djangocrud . 
+				al final del comando ponemos el caracter del "." para que la carpeta creada por el modulo de django
+				este dentro de la carpeta principal, y este no cree otra carpeta.
+				
+	7.-Ejecutamos el proyecto con el siguiente comando.
+		#ejemplo de comando para ejecutar proyecto en django:
+			(venv) PS C:\Users\WILLIAM CANO\Desktop\django-crud-auth>python manage.py runserver
+
+02.-Aplicacion TASK
+	1.-Para crear una nueva aplicacion dentro del proyecto se utiliza el siguiente comando.
+		#ejemplo de comando para crear nueva aplicacion en django:
+			(venv) PS C:\Users\WILLIAM CANO\Desktop\django-crud-auth>python manage.py startapp tasks #tasks nombre de nueva aplicacion.
+		
+		esto creara una nueva carpeta con los elementos nesesarios para trabajar con nuestra nueva aplicacion en django.
+		
+	2.-Una vez creada la nueva aplicacion, tenemos que hacer que django conozca o pueda ver este nuevo modulo.
+		para esto vamos ingresar ala carpeta del proyecto principal "djangocrud", y buscamos el archivo de configuracion global
+		que tiene por nombre "settings.py", dentro del archivo "settings.py" nos vamos hasta el apartado llamado "INSTALLED_APPS"
+		y entre comillas simples agregamos nuesta nueva aplicacion llamada ,'tasks' y guardamos el archivo.
+	
+	3.-ahora para comprobar que todo esta funcionando correctamente, vamos a crear nuestro primer Hello Word! desde la aplicacion tasks.
+		En la carpeta del proyecto tasks, vamos al archivo llamado "views.py" lo abrimos y escribimos las siguiente lineas de codigo.
+		al incio del archivo vamos a llamar la funcion "HttpResponse" de la siguiente manera:
+
+			from django.shortcuts import render
+			from django.http import HttpResponse #llamar funcion HttpResponse.
+				
+		creamos una nueva funcion llamada helloWord, que tendra como parametro un request y retornara un HttpResponse 'helloWord!'
+
+			# Create your views here.
+			def helloWord(request): #nueva funcion llamada helloWord
+				return HttpResponse('helloWord!') #return helloWord!
+
+	4.-Creada nuestra funcion que devolvera un helloWord, vamos a ingresar a la carpeta de nuestro proyecto principal "djangocrud"
+		al archivo "urls.py" y vamos a import nuestro archivo "views.py" de nuesta aplicacion "tasks"
+		debajo de la ultima importacion vamos agregar la siguiente linea de codigo:
+		
+		from tasks import views
+		
+		con esto el archivo "urls.py" del proyecto principal "djangocrud" conozca el archivo "views.py" de la aplicacion "tasks"
+		
+		y en el mismo archivo "url.py" en apartado "urlpatterns" agregamos una nueva url.
+
+			urlpatterns = [
+				path('admin/', admin.site.urls),
+				path('',views.helloWord),#nueva url creada. 
+			]
+			
+		con esto se crea nuestro primer helloWord de nuesta aplicacion "tasks"
+	
+03.-Creando formulario signup
+	1.-Vamos aprender a devolver una pagina completa de html con django.
+	2.-Crearemos una carpeta nueva en la carpeta principal de nuestra aplicacion "tasks" con el nombre "templates"
+		creamos un archivo dentro de la carpetes "templates" llamado signup.html
+		dentro del nuevo archivo llamado signup.html escribimos la siguiente linea de codigo:
+		
+		<h1>SetUp</h1>
+		
+	3.-ahora dentro del archivo "views.py" de la aplicacion "task" ya no utilizaremos la funcion HttpResponse 
+		si no que ahora utlizaremos la funcion "render" que se importa de django.shortcuts:
+	
+			from django.shortcuts import render
+
+			# Create your views here.
+			def helloWord(request):
+				return render(request,'signup.html')
+		
+	la funcion render espera como primer parametro un request, seguido de la plantilla html a ejecutar.
+	
+	4.-django nos proporciona formularios, simplemente tenemos que importarlos de la siguiente manera.
+		dentro del archivo "views.py" de la aplicacion "tasks" vamos a importar el formulario.
+		
+			from django.shortcuts import render
+			fron django.contrib.auth.form import UserCreationForm #importando formulario de django
+			
+		ahora debemos pasar el formulario de python a html	utilizando el motor de render ginja
+		
+		nosotros podemos pasar datos de python a html de la siguiente manera debajo de la funcion "helloWord" escribimos lo siguiente.
+		una nueva vareablea llamada "title" con el valor de "helloWord".
+
+		# Create your views here.
+		def helloWord(request):
+			title = 'helloWord' #nueva linea de codigo.
+		
+		ahora para pasar la variable de nombre "title" al archivo "signup.html" utilizamos un diccionario en el return de la funcion render
+		de la siguiente manera:
+		
+		from django.shortcuts import render
+		from django.contrib.auth.forms import UserCreationForm
+
+		# Create your views here.
+		def helloWord(request):
+			title = 'hello word!'
+			return render(request,'signup.html',{
+				"title":title #nuevo diccionario con vareable title
+			})
+			
+		ahora en el archivo "signup.html" agregamos la siguiente linea de codigo y ejecutamos el proyecto.
+		
+		<h1>Signup</h1>
+
+		{{ title }}
+		
+		ahora para pasar a html el formulario que nos proporciona django en ves de pasar una vareable por el diccionario
+		pasaremos la funcion "UserCreationForm" de la siguiente manera:
+		
+		from django.shortcuts import render
+		from django.contrib.auth.forms import UserCreationForm
+
+		# Create your views here.
+		def helloWord(request):
+			#title = 'hello word!'
+			return render(request,'signup.html',{
+				#"title":title
+				'form':UserCreationForm #form de django
+			})
+		
+		y en el archivo "signup.html" llamamos al form que definimos en el diccionario de la siguiente manera
+		
+		<h1>Signup</h1>
+
+		<form> 
+		{{ form.as_p }}
+		</form>
+		
+		con esto al ejecutar la aplicacion se mostrara el formulario que nos proporciona django.
+		
+	5.-Enviar los datos de formulario al ejecutar action
+		
+		en el archivo signup.html vamos agrgarle ala etiqueta del formulario la action a donde se va enviar la informacion
+		en este caso al presionar el boton agregar, se ejecutara la action y se enviara la informacion por el metodo post
+		ala siguiente url "/signup/".
+		
+		<h1>Signup</h1>
+
+		<form action="/signup/" method="post"> 
+		{{ form.as_p }}
+			<button>
+				signup
+			</button>
+		</form>
+		
+	6.- vamos agregar la nueva ruta "/signup/"
+		dentro de la carpeta principal del proyecto "djangocrud" en el archivo "urls.py" en el apartado "urlpatterns"
+		vamos agregar la nueva url de la siguiente manera:
+		
+		urlpatterns = [
+			path('admin/', admin.site.urls),
+			path('',views.helloWord),
+			path('signup/',views.helloWord),#nueva url creada para el action del formulario 
+		]
+		
+	7.-ahora en el archivo "signup.html" de la aplicacion task, debemos agregar la siguiente linea de codigo "{% csrf_token %}" para 
+		que el servidor realice la validacion de que los datos que se estan enviando son realmente de nuestros formularios y no 
+		desde una suplantacion
+		
+		quedaria de la siguiente manera:
+		
+		<h1>Signup</h1>
+
+		<form action="/signup/" method="post"> 
+		{% csrf_token %}
+		{{ form.as_p }}
+			<button>
+				signup
+			</button>
+		</form>
+		
+04.-Registros de usuarios
+	1.-ahora en la carpeta "templates" de la aplicacion "tasks" vamos a crear un nuevo archivo con el nonbre "home.html" en este archivo
+	vamos a colocar un simple h1 con la palabra home "<h1>home</h1>"
+	
+	dentro de la aplicacion "tasks" vamos a modificar el archivo "views.py" de la siguiente manera: 
+	
+	from django.shortcuts import render
+	from django.contrib.auth.forms import UserCreationForm
+
+	# Create your views here.
+	def home(request):#nueva funcion home
+		return render(request,'home.html')
+
+	def signup(request):
+		if request.method == 'GET':
+			print("send form")
+		else:
+			print(request.POST)
+			print("data send")
+		return render(request,'signup.html',{
+			'form' : UserCreationForm
+		})
+	
+	creamos una nueva funcion llamada "home" la cual servira para cargar la plantilla del home y creamos otra funcion llamara signup
+	para cargar la plantilla signup.
+	
+	en la funcion signup validamos el method request si es de tipo GET y si es de method POST
+	
+	vamos a ingresar al archivo "urls.py" en el apartado "urlpatterns" y vamos a modificar las url de la siguiente manera:
+	
+	urlpatterns = [
+    path('admin/', admin.site.urls),
+    path('',views.home, name='home'),
+    path('signup/',views.signup, name='signup'),
+	]
+	
+	aqui creamos 2 nuevas urls que ejecuta la funcion home, y la funcion signup anteriormente creada.
+
+	05.-Crear tabla desde ORM de python
+		1.-en la carpeta de nuestra aplicacion, en este ejemplo la aplicacion tasks, vamos a ingresar al archivo
+		'models.py' y vamos a importar libreria de models de la siguiente manera.
+
+		from django.db import models
+
+		ahora para crear una tabla nueva desde el ORM que proporciona django es nesesario crear una clase nueva,
+		debajo de nuestro import vamos a crear la siguiente clase
+
+		Class Task(models.Model):
+			title = models.CharField(max_length=200) #Tipo de dato Texto limitado por 200 caracteres
+			description = models.TextField(blank=True) #Tipo de dato Texto sin limite, y posibilidad de quedar en blanco
+			created = models.DateTimeField(auto_now_add=True) #Tipo de dato Fecha, automatica al momento de cargar info.
+			datacompleted = models.DateTimeField(null=True) #Tipo de dato Fecha, introduccion manual.
+			important = models.BooleanField(default=False) #Tipo de dato binario, por defecto False
+			user = models.ForeignKey()
+
+	#Nota:
+		para el campo user del modelo Task, vamos a definirlo como llave forania del modelo user, este modelo se uso en 
+		el archivo views.py para crear los usuarios nuevos, entonces nesesitamos importar este modelo a nuestro archivo
+		models y se realiza con la siguiente linea de codigo
+
+		from django.contrib.auth.models import User
+
+		quedando de la siguiente manera
+
+		from django.db import models
+		from django.contrib.auth.models import User
+
+		# Create your models here.
+		class Task(models.Model):
+			title = models.CharField(max_length=200)
+			description = models.TextField(blank=True)
+			created = models.DateTimeField(auto_now_add=True)
+			datacompleted = models.DateTimeField(null=True)
+			important = models.BinaryField(default=False)
+			user = models.ForeignKey(User, on_delete=models.CASCADE) #Si el usuario se elimina esta el modo cascada activo
+
+	2.-Crear la tabla
+		abrimos el terminal con el entorno virtual activo y escribimos el siguiente comando
+
+		python .\manage.py makemigrations
+
+		este comando crea un archivo nuevo con los comandos para crear la tabla ahora una vez creado el archivo
+		lo vamos a ejecutar con el siguiente comando
+
+		py .\manage.py migrate 
+
+		esto finalmente crea el modelo con las tablas correspondientes
+
+		#nota:
+			python .\manage.py makemigrations, este comando migra nuestra clase a codigo entendible por django para crear la tabla
+			py .\manage.py migrate, usa el archivo creado para finalmente crear la tabla con el modelo
+
+
+06.-Crear superusuario
+	1.-para crear un superusuario utilizamo el siguiente comando desde la terminal con el entorno virtual activo
+
+	python manage.py createsuperuser
+
+	seguir los pasos 
+
+07.-Administrar models desde panel de admin en python
+	1.-en nuestra aplicacion vamos a ingresar al archivo 'admin.py' y vamos a importar nuestro modelo 
+	de la siguiente manera, con esta linea de codigo
+
+	from .models import Task
+	# Register your models here.
+
+	admin.site.register(Task)	
+
+	de esta manera nuestro modelo/tabla, ya aparecera en el panel de admin de python
+
+	NOTA: 
+	al crear una nueva tarea desde el panel de admin, este no mostrara el nombre de la manera correctamente
+	para esto, se tiene que modificar el modelo de la siguiente manera
+
+	class Task(models.Model):
+    title = models.CharField(max_length=200)
+    description = models.TextField(blank=True)
+    created = models.DateTimeField(auto_now_add=True)
+    datacompleted = models.DateTimeField(null=True)
+    important = models.BooleanField(default=False)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    
+    def __str__(self): # funcion para pasar el string del titulo 
+        return self.title + ' by ' + self.user.username # concatenacion de titulo y nombre de usuario
+
+	2.- agregar campos no visibles en el panel de admin ejemplo 'created'
+		vamos a ingresar al archivo 'admin.py' y vamos agregar las siguiente linea de codigo que permitira ver
+		campos no visibles para el panel de admin
+
+		vamos a crear una nueva clase llamada TaskAdmin en el archivo 'admin.py'
+
+	from django.contrib import admin
+	from .models import Task
+	# Register your models here.
+	###########################################################################################
+	class TaskAdmin(admin.ModelAdmin): #clase para pasar los campos de solo lectura
+		readonly_fields = ("created",)
+	##########################################################################################	
+		
+	admin.site.register(Task, TaskAdmin)
+	
+08.- crear un formulario para aplicacion, desde modelo
+	1.- en la carpeta raiz de la aplicacion, en este ejemplo la aplicacion tasks, para crear un formulario basado desde un modelo
+	vamos a crear un nuevo archivo llamado, forms.py, en plurar por que aqui se crearan todos los formularios que se basen en un modelo
+	
+	'forms.py'
+	
+	vamos a utilizar un modulo de python llamado
+	
+	from django.forms import ModelForm
+	
+	ahora vamos a crear una nueva clase llamada TaskCreateForm
+	
+	from django.forms import ModelForm
+	from .models import Task
+
+	class TaskCreateForm(ModelForm):
+		class Meta:
+			model = Task
+			fields = ['title', 'description', 'important']
+			
+			
+	se crea una clase Meta, se importa el modelo desde .models y el import del modelo en el ejemplo se utilizo Task
+	y el la vareable fields se utiliza una lista, para saber que campos va a llevar el formulario, en este ejemplo se utilizaran
+	solo 3 campos del modelo Task
+	
+	2.-en el apartado 'views.py' tenemos que pasarle el formulario que acabamos de crear, para esto importamos de la siguiente manera
+	
+	from .forms import TaskCreateForm
+	
+	
+	y en la funcion donde se renderisa la pagina Create_task.html con un diccionario pasamos al fronted el formulario creado
+	
+	def create_task(request):
+    return render(request,'create_task.html',{
+        'form' : TaskCreateForm
+    })
+	
+	en el archivo create_task.html vamos a mostrar el formulario utilizando jinja2 de la siguiente manera
+	
+	{% extends "base.html" %}
+
+
+	{% block content %}
+
+	<h1>Create task</h1>
+
+
+	<form action="/tasks/create_task/" method="post">
+		{% csrf_token %}
+		{{ form }}
+		<button>Save</button>
+	</form>
+
+	{% endblock content %}
+
+	
+	

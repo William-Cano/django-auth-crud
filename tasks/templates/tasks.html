@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h1 class="text-center">{{encabezado}}</h1>
+{% for task in tasks %}
+<main class="container">
+    <div class="row">
+        <div class="col-md-6 offset-md-3">
+            <ul class="list-group"></ul>
+                <a class="list-group-item" href="{% url "task_detail" task.id %}">
+                    {% if task.important %}
+                        <strong>{{task.title}}</strong>
+                    {% else %}
+                            {{task.title}}
+                    {% endif %}
+                        <p>{{task.description}}</p>
+                        <p>{{task.user}}</p>
+                        <p>{{task.datacompleted|date:'M j Y:i'}}</p>
+                </a>
+            </ul>
+        </div>
+    </div>
+</main>
+{% endfor %}
+{% endblock content %}
+
